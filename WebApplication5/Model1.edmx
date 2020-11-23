@@ -1,0 +1,1027 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Taller_MecanicoModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Caja">
+          <Key>
+            <PropertyRef Name="IDCaja" />
+          </Key>
+          <Property Name="IDCaja" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IDCliente" Type="int" Nullable="false" />
+          <Property Name="Fecha" Type="date" />
+          <Property Name="Importe" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Detalle" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Cliente">
+          <Key>
+            <PropertyRef Name="IDCliente" />
+          </Key>
+          <Property Name="IDCliente" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="50" />
+          <Property Name="Cuit_DNI" Type="varchar" MaxLength="50" />
+          <Property Name="Telefono" Type="varchar" MaxLength="50" />
+          <Property Name="Mail" Type="varchar" MaxLength="50" />
+          <Property Name="IDTipoCliente" Type="int" Nullable="false" />
+          <Property Name="Observacion" Type="text" />
+          <Property Name="Direccion" Type="varchar" MaxLength="50" />
+          <Property Name="Borrado" Type="bit" />
+        </EntityType>
+        <EntityType Name="Estado">
+          <Key>
+            <PropertyRef Name="IDEstado" />
+          </Key>
+          <Property Name="IDEstado" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Estado" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Servicio">
+          <Key>
+            <PropertyRef Name="IDServicio" />
+          </Key>
+          <Property Name="IDServicio" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IDCliente" Type="int" Nullable="false" />
+          <Property Name="IDVehiculo" Type="int" Nullable="false" />
+          <Property Name="FechaServicio" Type="date" />
+          <Property Name="Km" Type="bigint" />
+          <Property Name="IDEstado" Type="int" />
+        </EntityType>
+        <EntityType Name="ServicioDetalle">
+          <Key>
+            <PropertyRef Name="IDServicioDetalle" />
+          </Key>
+          <Property Name="IDServicioDetalle" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IDServicio" Type="int" Nullable="false" />
+          <Property Name="Detalle" Type="varchar" MaxLength="50" />
+          <Property Name="Importe" Type="decimal" Precision="18" Scale="2" />
+        </EntityType>
+        <EntityType Name="TipoCliente">
+          <Key>
+            <PropertyRef Name="IDTipoCliente" />
+          </Key>
+          <Property Name="IDTipoCliente" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TipoCliente" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Vehiculo">
+          <Key>
+            <PropertyRef Name="IDVehiculo" />
+          </Key>
+          <Property Name="IDVehiculo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Marca" Type="varchar" MaxLength="50" />
+          <Property Name="Anio" Type="int" />
+          <Property Name="Chasis" Type="varchar" MaxLength="50" />
+          <Property Name="Motor" Type="varchar" MaxLength="50" />
+          <Property Name="Modelo" Type="varchar" MaxLength="50" />
+          <Property Name="Patente" Type="varchar" MaxLength="50" />
+          <Property Name="FechaIngreso" Type="date" />
+          <Property Name="Km" Type="bigint" />
+          <Property Name="IDCliente" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Caja_Cliente">
+          <End Role="Cliente" Type="Self.Cliente" Multiplicity="1" />
+          <End Role="Caja" Type="Self.Caja" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cliente">
+              <PropertyRef Name="IDCliente" />
+            </Principal>
+            <Dependent Role="Caja">
+              <PropertyRef Name="IDCliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Cliente_TipoCliente">
+          <End Role="TipoCliente" Type="Self.TipoCliente" Multiplicity="1" />
+          <End Role="Cliente" Type="Self.Cliente" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TipoCliente">
+              <PropertyRef Name="IDTipoCliente" />
+            </Principal>
+            <Dependent Role="Cliente">
+              <PropertyRef Name="IDTipoCliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Servicio_Cliente">
+          <End Role="Cliente" Type="Self.Cliente" Multiplicity="1" />
+          <End Role="Servicio" Type="Self.Servicio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cliente">
+              <PropertyRef Name="IDCliente" />
+            </Principal>
+            <Dependent Role="Servicio">
+              <PropertyRef Name="IDCliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Servicio_Estado">
+          <End Role="Estado" Type="Self.Estado" Multiplicity="0..1" />
+          <End Role="Servicio" Type="Self.Servicio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Estado">
+              <PropertyRef Name="IDEstado" />
+            </Principal>
+            <Dependent Role="Servicio">
+              <PropertyRef Name="IDEstado" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Servicio_Vehiculo">
+          <End Role="Vehiculo" Type="Self.Vehiculo" Multiplicity="1" />
+          <End Role="Servicio" Type="Self.Servicio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Vehiculo">
+              <PropertyRef Name="IDVehiculo" />
+            </Principal>
+            <Dependent Role="Servicio">
+              <PropertyRef Name="IDVehiculo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ServicioDetalle_Servicio">
+          <End Role="Servicio" Type="Self.Servicio" Multiplicity="1" />
+          <End Role="ServicioDetalle" Type="Self.ServicioDetalle" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Servicio">
+              <PropertyRef Name="IDServicio" />
+            </Principal>
+            <Dependent Role="ServicioDetalle">
+              <PropertyRef Name="IDServicio" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="Caja_Actualizar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idcaja" Type="int" Mode="In" />
+          <Parameter Name="idcliente" Type="int" Mode="In" />
+          <Parameter Name="fecha" Type="date" Mode="In" />
+          <Parameter Name="detalle" Type="varchar" Mode="In" />
+          <Parameter Name="importe" Type="decimal" Mode="In" />
+        </Function>
+        <Function Name="Caja_Agregar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IDCliente" Type="int" Mode="In" />
+          <Parameter Name="fecha" Type="date" Mode="In" />
+          <Parameter Name="importe" Type="decimal" Mode="In" />
+          <Parameter Name="detalle" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="Caja_Baja" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idcaja" Type="int" Mode="In" />
+        </Function>
+        <Function Name="Caja_TraerCliente" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idcliente" Type="int" Mode="In" />
+        </Function>
+        <Function Name="Caja_TraerUno" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idcaja" Type="int" Mode="In" />
+        </Function>
+        <Function Name="Cliente_Actualizar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idcliente" Type="int" Mode="In" />
+          <Parameter Name="nombre" Type="varchar" Mode="In" />
+          <Parameter Name="cuit_dni" Type="varchar" Mode="In" />
+          <Parameter Name="telefono" Type="varchar" Mode="In" />
+          <Parameter Name="mail" Type="varchar" Mode="In" />
+          <Parameter Name="idtipocliente" Type="int" Mode="In" />
+          <Parameter Name="observacion" Type="text" Mode="In" />
+          <Parameter Name="direccion" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="Cliente_Agregar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Nombre" Type="varchar" Mode="In" />
+          <Parameter Name="Cuit_Dni" Type="varchar" Mode="In" />
+          <Parameter Name="Telefono" Type="varchar" Mode="In" />
+          <Parameter Name="Mail" Type="varchar" Mode="In" />
+          <Parameter Name="IDTipoCliente" Type="int" Mode="In" />
+          <Parameter Name="Observaciones" Type="text" Mode="In" />
+          <Parameter Name="Direccion" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="Cliente_Baja" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idcliente" Type="int" Mode="In" />
+        </Function>
+        <Function Name="Cliente_Deuda" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idcliente" Type="int" Mode="In" />
+        </Function>
+        <Function Name="Cliente_SaldoAFavor" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idcliente" Type="int" Mode="In" />
+        </Function>
+        <Function Name="Cliente_TraerTodo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="Cliente_TraerUno" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idcliente" Type="int" Mode="In" />
+        </Function>
+        <Function Name="Cliente_TraerUnoCodigo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Nombre" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="Servicio_Actualizar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idservicio" Type="int" Mode="In" />
+          <Parameter Name="idcliente" Type="int" Mode="In" />
+          <Parameter Name="idvehiculo" Type="int" Mode="In" />
+          <Parameter Name="km" Type="bigint" Mode="In" />
+          <Parameter Name="idestado" Type="int" Mode="In" />
+        </Function>
+        <Function Name="Servicio_Agregar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IDCliente" Type="int" Mode="In" />
+          <Parameter Name="IDVehiculo" Type="int" Mode="In" />
+          <Parameter Name="Km" Type="bigint" Mode="In" />
+          <Parameter Name="IDEstado" Type="int" Mode="In" />
+        </Function>
+        <Function Name="Servicio_Baja" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idservicio" Type="int" Mode="In" />
+        </Function>
+        <Function Name="Servicio_TraerTodo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="Servicio_TraerTotalCliente" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idcliente" Type="int" Mode="In" />
+        </Function>
+        <Function Name="Servicio_TraerTotalVehiculo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idcliente" Type="int" Mode="In" />
+          <Parameter Name="idvehiculo" Type="int" Mode="In" />
+        </Function>
+        <Function Name="Servicio_TraerUno" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idservicio" Type="int" Mode="In" />
+        </Function>
+        <Function Name="ServicioDetalle_Actualizar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idservicio" Type="int" Mode="In" />
+          <Parameter Name="detalle" Type="varchar" Mode="In" />
+          <Parameter Name="importe" Type="decimal" Mode="In" />
+        </Function>
+        <Function Name="ServicioDetalle_Agregar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Detalle" Type="varchar" Mode="In" />
+          <Parameter Name="Importe" Type="decimal" Mode="In" />
+        </Function>
+        <Function Name="ServicioDetalle_Baja" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idservicio" Type="int" Mode="In" />
+        </Function>
+        <Function Name="ServicioDetalle_Traer" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idservicio" Type="int" Mode="In" />
+        </Function>
+        <Function Name="TotalDeuda" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="TotalSaldoAFavor" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="Vehiculo_Actualizar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idvehiculo" Type="int" Mode="In" />
+          <Parameter Name="marca" Type="varchar" Mode="In" />
+          <Parameter Name="modelo" Type="varchar" Mode="In" />
+          <Parameter Name="patente" Type="varchar" Mode="In" />
+          <Parameter Name="km" Type="bigint" Mode="In" />
+          <Parameter Name="anio" Type="int" Mode="In" />
+          <Parameter Name="chasis" Type="varchar" Mode="In" />
+          <Parameter Name="motor" Type="varchar" Mode="In" />
+          <Parameter Name="idcliente" Type="int" Mode="In" />
+        </Function>
+        <Function Name="Vehiculo_Agregar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Marca" Type="varchar" Mode="In" />
+          <Parameter Name="Anio" Type="int" Mode="In" />
+          <Parameter Name="Chasis" Type="varchar" Mode="In" />
+          <Parameter Name="Motor" Type="varchar" Mode="In" />
+          <Parameter Name="Modelo" Type="varchar" Mode="In" />
+          <Parameter Name="Patente" Type="varchar" Mode="In" />
+          <Parameter Name="Km" Type="bigint" Mode="In" />
+          <Parameter Name="IDCliente" Type="int" Mode="In" />
+        </Function>
+        <Function Name="Vehiculo_Baja" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idvehiculo" Type="int" Mode="In" />
+        </Function>
+        <Function Name="Vehiculo_TraerTodo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="Vehiculo_TraerUno" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idvehiculo" Type="int" Mode="In" />
+        </Function>
+        <Function Name="Vehiculo_TraerUnoCodigo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="patente" Type="varchar" Mode="In" />
+        </Function>
+        <EntityContainer Name="Taller_MecanicoModelStoreContainer">
+          <EntitySet Name="Caja" EntityType="Self.Caja" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Cliente" EntityType="Self.Cliente" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Estado" EntityType="Self.Estado" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Servicio" EntityType="Self.Servicio" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ServicioDetalle" EntityType="Self.ServicioDetalle" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TipoCliente" EntityType="Self.TipoCliente" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Vehiculo" EntityType="Self.Vehiculo" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Caja_Cliente" Association="Self.FK_Caja_Cliente">
+            <End Role="Cliente" EntitySet="Cliente" />
+            <End Role="Caja" EntitySet="Caja" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Cliente_TipoCliente" Association="Self.FK_Cliente_TipoCliente">
+            <End Role="TipoCliente" EntitySet="TipoCliente" />
+            <End Role="Cliente" EntitySet="Cliente" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Servicio_Cliente" Association="Self.FK_Servicio_Cliente">
+            <End Role="Cliente" EntitySet="Cliente" />
+            <End Role="Servicio" EntitySet="Servicio" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Servicio_Estado" Association="Self.FK_Servicio_Estado">
+            <End Role="Estado" EntitySet="Estado" />
+            <End Role="Servicio" EntitySet="Servicio" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Servicio_Vehiculo" Association="Self.FK_Servicio_Vehiculo">
+            <End Role="Vehiculo" EntitySet="Vehiculo" />
+            <End Role="Servicio" EntitySet="Servicio" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ServicioDetalle_Servicio" Association="Self.FK_ServicioDetalle_Servicio">
+            <End Role="Servicio" EntitySet="Servicio" />
+            <End Role="ServicioDetalle" EntitySet="ServicioDetalle" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Taller_MecanicoModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Caja">
+          <Key>
+            <PropertyRef Name="IDCaja" />
+          </Key>
+          <Property Name="IDCaja" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IDCliente" Type="Int32" Nullable="false" />
+          <Property Name="Fecha" Type="DateTime" Precision="0" />
+          <Property Name="Importe" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Detalle" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Cliente" Relationship="Self.FK_Caja_Cliente" FromRole="Caja" ToRole="Cliente" />
+        </EntityType>
+        <EntityType Name="Cliente">
+          <Key>
+            <PropertyRef Name="IDCliente" />
+          </Key>
+          <Property Name="IDCliente" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Cuit_DNI" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Telefono" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Mail" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="IDTipoCliente" Type="Int32" Nullable="false" />
+          <Property Name="Observacion" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Direccion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Borrado" Type="Boolean" />
+          <NavigationProperty Name="Caja" Relationship="Self.FK_Caja_Cliente" FromRole="Cliente" ToRole="Caja" />
+          <NavigationProperty Name="TipoCliente" Relationship="Self.FK_Cliente_TipoCliente" FromRole="Cliente" ToRole="TipoCliente" />
+          <NavigationProperty Name="Servicio" Relationship="Self.FK_Servicio_Cliente" FromRole="Cliente" ToRole="Servicio" />
+        </EntityType>
+        <EntityType Name="Estado">
+          <Key>
+            <PropertyRef Name="IDEstado" />
+          </Key>
+          <Property Name="IDEstado" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Estado1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Servicio" Relationship="Self.FK_Servicio_Estado" FromRole="Estado" ToRole="Servicio" />
+        </EntityType>
+        <EntityType Name="Servicio">
+          <Key>
+            <PropertyRef Name="IDServicio" />
+          </Key>
+          <Property Name="IDServicio" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IDCliente" Type="Int32" Nullable="false" />
+          <Property Name="IDVehiculo" Type="Int32" Nullable="false" />
+          <Property Name="FechaServicio" Type="DateTime" Precision="0" />
+          <Property Name="Km" Type="Int64" />
+          <Property Name="IDEstado" Type="Int32" />
+          <NavigationProperty Name="Cliente" Relationship="Self.FK_Servicio_Cliente" FromRole="Servicio" ToRole="Cliente" />
+          <NavigationProperty Name="Estado" Relationship="Self.FK_Servicio_Estado" FromRole="Servicio" ToRole="Estado" />
+          <NavigationProperty Name="Vehiculo" Relationship="Self.FK_Servicio_Vehiculo" FromRole="Servicio" ToRole="Vehiculo" />
+          <NavigationProperty Name="ServicioDetalle" Relationship="Self.FK_ServicioDetalle_Servicio" FromRole="Servicio" ToRole="ServicioDetalle" />
+        </EntityType>
+        <EntityType Name="ServicioDetalle">
+          <Key>
+            <PropertyRef Name="IDServicioDetalle" />
+          </Key>
+          <Property Name="IDServicioDetalle" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IDServicio" Type="Int32" Nullable="false" />
+          <Property Name="Detalle" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Importe" Type="Decimal" Precision="18" Scale="2" />
+          <NavigationProperty Name="Servicio" Relationship="Self.FK_ServicioDetalle_Servicio" FromRole="ServicioDetalle" ToRole="Servicio" />
+        </EntityType>
+        <EntityType Name="TipoCliente">
+          <Key>
+            <PropertyRef Name="IDTipoCliente" />
+          </Key>
+          <Property Name="IDTipoCliente" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TipoCliente1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Cliente" Relationship="Self.FK_Cliente_TipoCliente" FromRole="TipoCliente" ToRole="Cliente" />
+        </EntityType>
+        <EntityType Name="Vehiculo">
+          <Key>
+            <PropertyRef Name="IDVehiculo" />
+          </Key>
+          <Property Name="IDVehiculo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Marca" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Anio" Type="Int32" />
+          <Property Name="Chasis" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Motor" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Modelo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Patente" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="FechaIngreso" Type="DateTime" Precision="0" />
+          <Property Name="Km" Type="Int64" />
+          <Property Name="IDCliente" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Servicio" Relationship="Self.FK_Servicio_Vehiculo" FromRole="Vehiculo" ToRole="Servicio" />
+        </EntityType>
+        <Association Name="FK_Caja_Cliente">
+          <End Role="Cliente" Type="Self.Cliente" Multiplicity="1" />
+          <End Role="Caja" Type="Self.Caja" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cliente">
+              <PropertyRef Name="IDCliente" />
+            </Principal>
+            <Dependent Role="Caja">
+              <PropertyRef Name="IDCliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Cliente_TipoCliente">
+          <End Role="TipoCliente" Type="Self.TipoCliente" Multiplicity="1" />
+          <End Role="Cliente" Type="Self.Cliente" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TipoCliente">
+              <PropertyRef Name="IDTipoCliente" />
+            </Principal>
+            <Dependent Role="Cliente">
+              <PropertyRef Name="IDTipoCliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Servicio_Cliente">
+          <End Role="Cliente" Type="Self.Cliente" Multiplicity="1" />
+          <End Role="Servicio" Type="Self.Servicio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cliente">
+              <PropertyRef Name="IDCliente" />
+            </Principal>
+            <Dependent Role="Servicio">
+              <PropertyRef Name="IDCliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Servicio_Estado">
+          <End Role="Estado" Type="Self.Estado" Multiplicity="0..1" />
+          <End Role="Servicio" Type="Self.Servicio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Estado">
+              <PropertyRef Name="IDEstado" />
+            </Principal>
+            <Dependent Role="Servicio">
+              <PropertyRef Name="IDEstado" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Servicio_Vehiculo">
+          <End Role="Vehiculo" Type="Self.Vehiculo" Multiplicity="1" />
+          <End Role="Servicio" Type="Self.Servicio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Vehiculo">
+              <PropertyRef Name="IDVehiculo" />
+            </Principal>
+            <Dependent Role="Servicio">
+              <PropertyRef Name="IDVehiculo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ServicioDetalle_Servicio">
+          <End Role="Servicio" Type="Self.Servicio" Multiplicity="1" />
+          <End Role="ServicioDetalle" Type="Self.ServicioDetalle" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Servicio">
+              <PropertyRef Name="IDServicio" />
+            </Principal>
+            <Dependent Role="ServicioDetalle">
+              <PropertyRef Name="IDServicio" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Taller_MecanicoEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Caja" EntityType="Self.Caja" />
+          <EntitySet Name="Cliente" EntityType="Self.Cliente" />
+          <EntitySet Name="Estado" EntityType="Self.Estado" />
+          <EntitySet Name="Servicio" EntityType="Self.Servicio" />
+          <EntitySet Name="ServicioDetalle" EntityType="Self.ServicioDetalle" />
+          <EntitySet Name="TipoCliente" EntityType="Self.TipoCliente" />
+          <EntitySet Name="Vehiculo" EntityType="Self.Vehiculo" />
+          <AssociationSet Name="FK_Caja_Cliente" Association="Self.FK_Caja_Cliente">
+            <End Role="Cliente" EntitySet="Cliente" />
+            <End Role="Caja" EntitySet="Caja" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Cliente_TipoCliente" Association="Self.FK_Cliente_TipoCliente">
+            <End Role="TipoCliente" EntitySet="TipoCliente" />
+            <End Role="Cliente" EntitySet="Cliente" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Servicio_Cliente" Association="Self.FK_Servicio_Cliente">
+            <End Role="Cliente" EntitySet="Cliente" />
+            <End Role="Servicio" EntitySet="Servicio" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Servicio_Estado" Association="Self.FK_Servicio_Estado">
+            <End Role="Estado" EntitySet="Estado" />
+            <End Role="Servicio" EntitySet="Servicio" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Servicio_Vehiculo" Association="Self.FK_Servicio_Vehiculo">
+            <End Role="Vehiculo" EntitySet="Vehiculo" />
+            <End Role="Servicio" EntitySet="Servicio" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ServicioDetalle_Servicio" Association="Self.FK_ServicioDetalle_Servicio">
+            <End Role="Servicio" EntitySet="Servicio" />
+            <End Role="ServicioDetalle" EntitySet="ServicioDetalle" />
+          </AssociationSet>
+          <FunctionImport Name="Caja_Actualizar">
+            <Parameter Name="idcaja" Mode="In" Type="Int32" />
+            <Parameter Name="idcliente" Mode="In" Type="Int32" />
+            <Parameter Name="fecha" Mode="In" Type="DateTime" />
+            <Parameter Name="detalle" Mode="In" Type="String" />
+            <Parameter Name="importe" Mode="In" Type="Decimal" />
+          </FunctionImport>
+          <FunctionImport Name="Caja_Agregar">
+            <Parameter Name="IDCliente" Mode="In" Type="Int32" />
+            <Parameter Name="fecha" Mode="In" Type="DateTime" />
+            <Parameter Name="importe" Mode="In" Type="Decimal" />
+            <Parameter Name="detalle" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="Caja_Baja">
+            <Parameter Name="idcaja" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="Caja_TraerCliente" ReturnType="Collection(Taller_MecanicoModel.Caja_TraerCliente_Result)">
+            <Parameter Name="idcliente" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="Caja_TraerUno" ReturnType="Collection(Taller_MecanicoModel.Caja_TraerUno_Result)">
+            <Parameter Name="idcaja" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="Cliente_Actualizar">
+            <Parameter Name="idcliente" Mode="In" Type="Int32" />
+            <Parameter Name="nombre" Mode="In" Type="String" />
+            <Parameter Name="cuit_dni" Mode="In" Type="String" />
+            <Parameter Name="telefono" Mode="In" Type="String" />
+            <Parameter Name="mail" Mode="In" Type="String" />
+            <Parameter Name="idtipocliente" Mode="In" Type="Int32" />
+            <Parameter Name="observacion" Mode="In" Type="String" />
+            <Parameter Name="direccion" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="Cliente_Agregar">
+            <Parameter Name="Nombre" Mode="In" Type="String" />
+            <Parameter Name="Cuit_Dni" Mode="In" Type="String" />
+            <Parameter Name="Telefono" Mode="In" Type="String" />
+            <Parameter Name="Mail" Mode="In" Type="String" />
+            <Parameter Name="IDTipoCliente" Mode="In" Type="Int32" />
+            <Parameter Name="Observaciones" Mode="In" Type="String" />
+            <Parameter Name="Direccion" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="Cliente_Baja">
+            <Parameter Name="idcliente" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="Cliente_Deuda" ReturnType="Collection(Decimal)">
+            <Parameter Name="idcliente" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="Cliente_SaldoAFavor" ReturnType="Collection(Decimal)">
+            <Parameter Name="idcliente" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="Cliente_TraerTodo" ReturnType="Collection(Taller_MecanicoModel.Cliente_TraerTodo_Result)" />
+          <FunctionImport Name="Cliente_TraerUno" ReturnType="Collection(Taller_MecanicoModel.Cliente_TraerUno_Result)">
+            <Parameter Name="idcliente" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="Cliente_TraerUnoCodigo" ReturnType="Collection(Taller_MecanicoModel.Cliente_TraerUnoCodigo_Result)">
+            <Parameter Name="Nombre" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="Servicio_Actualizar">
+            <Parameter Name="idservicio" Mode="In" Type="Int32" />
+            <Parameter Name="idcliente" Mode="In" Type="Int32" />
+            <Parameter Name="idvehiculo" Mode="In" Type="Int32" />
+            <Parameter Name="km" Mode="In" Type="Int64" />
+            <Parameter Name="idestado" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="Servicio_Agregar">
+            <Parameter Name="IDCliente" Mode="In" Type="Int32" />
+            <Parameter Name="IDVehiculo" Mode="In" Type="Int32" />
+            <Parameter Name="Km" Mode="In" Type="Int64" />
+            <Parameter Name="IDEstado" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="Servicio_Baja">
+            <Parameter Name="idservicio" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="Servicio_TraerTodo" ReturnType="Collection(Taller_MecanicoModel.Servicio_TraerTodo_Result)" />
+          <FunctionImport Name="Servicio_TraerTotalCliente">
+            <Parameter Name="idcliente" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="Servicio_TraerTotalVehiculo">
+            <Parameter Name="idcliente" Mode="In" Type="Int32" />
+            <Parameter Name="idvehiculo" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="Servicio_TraerUno" ReturnType="Collection(Taller_MecanicoModel.Servicio_TraerUno_Result)">
+            <Parameter Name="idservicio" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="ServicioDetalle_Actualizar">
+            <Parameter Name="idservicio" Mode="In" Type="Int32" />
+            <Parameter Name="detalle" Mode="In" Type="String" />
+            <Parameter Name="importe" Mode="In" Type="Decimal" />
+          </FunctionImport>
+          <FunctionImport Name="ServicioDetalle_Agregar">
+            <Parameter Name="Detalle" Mode="In" Type="String" />
+            <Parameter Name="Importe" Mode="In" Type="Decimal" />
+          </FunctionImport>
+          <FunctionImport Name="ServicioDetalle_Baja">
+            <Parameter Name="idservicio" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="ServicioDetalle_Traer" ReturnType="Collection(Taller_MecanicoModel.ServicioDetalle_Traer_Result)">
+            <Parameter Name="idservicio" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="TotalDeuda" ReturnType="Collection(Decimal)" />
+          <FunctionImport Name="TotalSaldoAFavor" ReturnType="Collection(Decimal)" />
+          <FunctionImport Name="Vehiculo_Actualizar">
+            <Parameter Name="idvehiculo" Mode="In" Type="Int32" />
+            <Parameter Name="marca" Mode="In" Type="String" />
+            <Parameter Name="modelo" Mode="In" Type="String" />
+            <Parameter Name="patente" Mode="In" Type="String" />
+            <Parameter Name="km" Mode="In" Type="Int64" />
+            <Parameter Name="anio" Mode="In" Type="Int32" />
+            <Parameter Name="chasis" Mode="In" Type="String" />
+            <Parameter Name="motor" Mode="In" Type="String" />
+            <Parameter Name="idcliente" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="Vehiculo_Agregar">
+            <Parameter Name="Marca" Mode="In" Type="String" />
+            <Parameter Name="Anio" Mode="In" Type="Int32" />
+            <Parameter Name="Chasis" Mode="In" Type="String" />
+            <Parameter Name="Motor" Mode="In" Type="String" />
+            <Parameter Name="Modelo" Mode="In" Type="String" />
+            <Parameter Name="Patente" Mode="In" Type="String" />
+            <Parameter Name="Km" Mode="In" Type="Int64" />
+            <Parameter Name="IDCliente" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="Vehiculo_Baja">
+            <Parameter Name="idvehiculo" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="Vehiculo_TraerTodo" ReturnType="Collection(Taller_MecanicoModel.Vehiculo_TraerTodo_Result)" />
+          <FunctionImport Name="Vehiculo_TraerUno" ReturnType="Collection(Taller_MecanicoModel.Vehiculo_TraerUno_Result)">
+            <Parameter Name="idvehiculo" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="Vehiculo_TraerUnoCodigo" ReturnType="Collection(Taller_MecanicoModel.Vehiculo_TraerUnoCodigo_Result)">
+            <Parameter Name="patente" Mode="In" Type="String" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="Caja_TraerCliente_Result">
+          <Property Type="Int32" Name="IDCaja" Nullable="false" />
+          <Property Type="Int32" Name="IDCliente" Nullable="false" />
+          <Property Type="DateTime" Name="Fecha" Nullable="true" />
+          <Property Type="Decimal" Name="Importe" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="String" Name="Detalle" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="Caja_TraerUno_Result">
+          <Property Type="Int32" Name="IDCaja" Nullable="false" />
+          <Property Type="Int32" Name="IDCliente" Nullable="false" />
+          <Property Type="DateTime" Name="Fecha" Nullable="true" />
+          <Property Type="Decimal" Name="Importe" Nullable="true" Precision="18" Scale="2" />
+          <Property Type="String" Name="Detalle" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="Cliente_TraerTodo_Result">
+          <Property Type="Int32" Name="IDCliente" Nullable="false" />
+          <Property Type="String" Name="Nombre" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Cuit_DNI" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Telefono" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Mail" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="IDTipoCliente" Nullable="false" />
+          <Property Type="String" Name="Observacion" Nullable="true" MaxLength="Max" />
+          <Property Type="String" Name="Direccion" Nullable="true" MaxLength="50" />
+          <Property Type="Boolean" Name="Borrado" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="Cliente_TraerUno_Result">
+          <Property Type="Int32" Name="IDCliente" Nullable="false" />
+          <Property Type="String" Name="Nombre" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Cuit_DNI" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Telefono" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Mail" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="IDTipoCliente" Nullable="false" />
+          <Property Type="String" Name="Observacion" Nullable="false" MaxLength="Max" />
+          <Property Type="String" Name="Direccion" Nullable="false" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="Cliente_TraerUnoCodigo_Result">
+          <Property Type="Int32" Name="IDCliente" Nullable="false" />
+          <Property Type="String" Name="Nombre" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Cuit_DNI" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Telefono" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Mail" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="IDTipoCliente" Nullable="false" />
+          <Property Type="String" Name="Observacion" Nullable="true" MaxLength="Max" />
+          <Property Type="String" Name="Direccion" Nullable="true" MaxLength="50" />
+          <Property Type="Boolean" Name="Borrado" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="Servicio_TraerTodo_Result">
+          <Property Type="Int32" Name="IDServicio" Nullable="false" />
+          <Property Type="Int32" Name="IDCliente" Nullable="false" />
+          <Property Type="Int32" Name="IDVehiculo" Nullable="false" />
+          <Property Type="DateTime" Name="FechaServicio" Nullable="true" />
+          <Property Type="Int64" Name="Km" Nullable="true" />
+          <Property Type="Int32" Name="IDEstado" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="Servicio_TraerUno_Result">
+          <Property Type="Int32" Name="IDServicio" Nullable="false" />
+          <Property Type="Int32" Name="IDCliente" Nullable="false" />
+          <Property Type="Int32" Name="IDVehiculo" Nullable="false" />
+          <Property Type="DateTime" Name="FechaServicio" Nullable="true" />
+          <Property Type="Int64" Name="Km" Nullable="true" />
+          <Property Type="Int32" Name="IDEstado" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="ServicioDetalle_Traer_Result">
+          <Property Type="Int32" Name="IDServicioDetalle" Nullable="false" />
+          <Property Type="Int32" Name="IDServicio" Nullable="false" />
+          <Property Type="String" Name="Detalle" Nullable="true" MaxLength="50" />
+          <Property Type="Decimal" Name="Importe" Nullable="true" Precision="18" Scale="2" />
+        </ComplexType>
+        <ComplexType Name="Vehiculo_TraerTodo_Result">
+          <Property Type="Int32" Name="IDVehiculo" Nullable="false" />
+          <Property Type="String" Name="Marca" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="Anio" Nullable="true" />
+          <Property Type="String" Name="Chasis" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Motor" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Modelo" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Patente" Nullable="true" MaxLength="50" />
+          <Property Type="DateTime" Name="FechaIngreso" Nullable="true" />
+          <Property Type="Int64" Name="Km" Nullable="true" />
+          <Property Type="Int32" Name="IDCliente" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="Vehiculo_TraerUno_Result">
+          <Property Type="Int32" Name="IDVehiculo" Nullable="false" />
+          <Property Type="String" Name="Marca" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="Anio" Nullable="true" />
+          <Property Type="String" Name="Chasis" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Motor" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Modelo" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Patente" Nullable="true" MaxLength="50" />
+          <Property Type="DateTime" Name="FechaIngreso" Nullable="true" />
+          <Property Type="Int64" Name="Km" Nullable="true" />
+          <Property Type="Int32" Name="IDCliente" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="Vehiculo_TraerUnoCodigo_Result">
+          <Property Type="Int32" Name="IDVehiculo" Nullable="false" />
+          <Property Type="String" Name="Marca" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="Anio" Nullable="true" />
+          <Property Type="String" Name="Chasis" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Motor" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Modelo" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Patente" Nullable="true" MaxLength="50" />
+          <Property Type="DateTime" Name="FechaIngreso" Nullable="true" />
+          <Property Type="Int64" Name="Km" Nullable="true" />
+          <Property Type="Int32" Name="IDCliente" Nullable="false" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Taller_MecanicoModelStoreContainer" CdmEntityContainer="Taller_MecanicoEntities">
+          <EntitySetMapping Name="Caja">
+            <EntityTypeMapping TypeName="Taller_MecanicoModel.Caja">
+              <MappingFragment StoreEntitySet="Caja">
+                <ScalarProperty Name="IDCaja" ColumnName="IDCaja" />
+                <ScalarProperty Name="IDCliente" ColumnName="IDCliente" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="Importe" ColumnName="Importe" />
+                <ScalarProperty Name="Detalle" ColumnName="Detalle" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Cliente">
+            <EntityTypeMapping TypeName="Taller_MecanicoModel.Cliente">
+              <MappingFragment StoreEntitySet="Cliente">
+                <ScalarProperty Name="IDCliente" ColumnName="IDCliente" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Cuit_DNI" ColumnName="Cuit_DNI" />
+                <ScalarProperty Name="Telefono" ColumnName="Telefono" />
+                <ScalarProperty Name="Mail" ColumnName="Mail" />
+                <ScalarProperty Name="IDTipoCliente" ColumnName="IDTipoCliente" />
+                <ScalarProperty Name="Observacion" ColumnName="Observacion" />
+                <ScalarProperty Name="Direccion" ColumnName="Direccion" />
+                <ScalarProperty Name="Borrado" ColumnName="Borrado" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Estado">
+            <EntityTypeMapping TypeName="Taller_MecanicoModel.Estado">
+              <MappingFragment StoreEntitySet="Estado">
+                <ScalarProperty Name="IDEstado" ColumnName="IDEstado" />
+                <ScalarProperty Name="Estado1" ColumnName="Estado" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Servicio">
+            <EntityTypeMapping TypeName="Taller_MecanicoModel.Servicio">
+              <MappingFragment StoreEntitySet="Servicio">
+                <ScalarProperty Name="IDServicio" ColumnName="IDServicio" />
+                <ScalarProperty Name="IDCliente" ColumnName="IDCliente" />
+                <ScalarProperty Name="IDVehiculo" ColumnName="IDVehiculo" />
+                <ScalarProperty Name="FechaServicio" ColumnName="FechaServicio" />
+                <ScalarProperty Name="Km" ColumnName="Km" />
+                <ScalarProperty Name="IDEstado" ColumnName="IDEstado" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ServicioDetalle">
+            <EntityTypeMapping TypeName="Taller_MecanicoModel.ServicioDetalle">
+              <MappingFragment StoreEntitySet="ServicioDetalle">
+                <ScalarProperty Name="IDServicioDetalle" ColumnName="IDServicioDetalle" />
+                <ScalarProperty Name="IDServicio" ColumnName="IDServicio" />
+                <ScalarProperty Name="Detalle" ColumnName="Detalle" />
+                <ScalarProperty Name="Importe" ColumnName="Importe" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TipoCliente">
+            <EntityTypeMapping TypeName="Taller_MecanicoModel.TipoCliente">
+              <MappingFragment StoreEntitySet="TipoCliente">
+                <ScalarProperty Name="IDTipoCliente" ColumnName="IDTipoCliente" />
+                <ScalarProperty Name="TipoCliente1" ColumnName="TipoCliente" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Vehiculo">
+            <EntityTypeMapping TypeName="Taller_MecanicoModel.Vehiculo">
+              <MappingFragment StoreEntitySet="Vehiculo">
+                <ScalarProperty Name="IDVehiculo" ColumnName="IDVehiculo" />
+                <ScalarProperty Name="Marca" ColumnName="Marca" />
+                <ScalarProperty Name="Anio" ColumnName="Anio" />
+                <ScalarProperty Name="Chasis" ColumnName="Chasis" />
+                <ScalarProperty Name="Motor" ColumnName="Motor" />
+                <ScalarProperty Name="Modelo" ColumnName="Modelo" />
+                <ScalarProperty Name="Patente" ColumnName="Patente" />
+                <ScalarProperty Name="FechaIngreso" ColumnName="FechaIngreso" />
+                <ScalarProperty Name="Km" ColumnName="Km" />
+                <ScalarProperty Name="IDCliente" ColumnName="IDCliente" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="Caja_Actualizar" FunctionName="Taller_MecanicoModel.Store.Caja_Actualizar" />
+          <FunctionImportMapping FunctionImportName="Caja_Agregar" FunctionName="Taller_MecanicoModel.Store.Caja_Agregar" />
+          <FunctionImportMapping FunctionImportName="Caja_Baja" FunctionName="Taller_MecanicoModel.Store.Caja_Baja" />
+          <FunctionImportMapping FunctionImportName="Caja_TraerCliente" FunctionName="Taller_MecanicoModel.Store.Caja_TraerCliente">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Taller_MecanicoModel.Caja_TraerCliente_Result">
+                <ScalarProperty Name="IDCaja" ColumnName="IDCaja" />
+                <ScalarProperty Name="IDCliente" ColumnName="IDCliente" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="Importe" ColumnName="Importe" />
+                <ScalarProperty Name="Detalle" ColumnName="Detalle" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="Caja_TraerUno" FunctionName="Taller_MecanicoModel.Store.Caja_TraerUno">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Taller_MecanicoModel.Caja_TraerUno_Result">
+                <ScalarProperty Name="IDCaja" ColumnName="IDCaja" />
+                <ScalarProperty Name="IDCliente" ColumnName="IDCliente" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="Importe" ColumnName="Importe" />
+                <ScalarProperty Name="Detalle" ColumnName="Detalle" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="Cliente_Actualizar" FunctionName="Taller_MecanicoModel.Store.Cliente_Actualizar" />
+          <FunctionImportMapping FunctionImportName="Cliente_Agregar" FunctionName="Taller_MecanicoModel.Store.Cliente_Agregar" />
+          <FunctionImportMapping FunctionImportName="Cliente_Baja" FunctionName="Taller_MecanicoModel.Store.Cliente_Baja" />
+          <FunctionImportMapping FunctionImportName="Cliente_Deuda" FunctionName="Taller_MecanicoModel.Store.Cliente_Deuda" />
+          <FunctionImportMapping FunctionImportName="Cliente_SaldoAFavor" FunctionName="Taller_MecanicoModel.Store.Cliente_SaldoAFavor" />
+          <FunctionImportMapping FunctionImportName="Cliente_TraerTodo" FunctionName="Taller_MecanicoModel.Store.Cliente_TraerTodo">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Taller_MecanicoModel.Cliente_TraerTodo_Result">
+                <ScalarProperty Name="IDCliente" ColumnName="IDCliente" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Cuit_DNI" ColumnName="Cuit_DNI" />
+                <ScalarProperty Name="Telefono" ColumnName="Telefono" />
+                <ScalarProperty Name="Mail" ColumnName="Mail" />
+                <ScalarProperty Name="IDTipoCliente" ColumnName="IDTipoCliente" />
+                <ScalarProperty Name="Observacion" ColumnName="Observacion" />
+                <ScalarProperty Name="Direccion" ColumnName="Direccion" />
+                <ScalarProperty Name="Borrado" ColumnName="Borrado" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="Cliente_TraerUno" FunctionName="Taller_MecanicoModel.Store.Cliente_TraerUno">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Taller_MecanicoModel.Cliente_TraerUno_Result">
+                <ScalarProperty Name="IDCliente" ColumnName="IDCliente" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Cuit_DNI" ColumnName="Cuit_DNI" />
+                <ScalarProperty Name="Telefono" ColumnName="Telefono" />
+                <ScalarProperty Name="Mail" ColumnName="Mail" />
+                <ScalarProperty Name="IDTipoCliente" ColumnName="IDTipoCliente" />
+                <ScalarProperty Name="Observacion" ColumnName="Observacion" />
+                <ScalarProperty Name="Direccion" ColumnName="Direccion" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="Cliente_TraerUnoCodigo" FunctionName="Taller_MecanicoModel.Store.Cliente_TraerUnoCodigo">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Taller_MecanicoModel.Cliente_TraerUnoCodigo_Result">
+                <ScalarProperty Name="IDCliente" ColumnName="IDCliente" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Cuit_DNI" ColumnName="Cuit_DNI" />
+                <ScalarProperty Name="Telefono" ColumnName="Telefono" />
+                <ScalarProperty Name="Mail" ColumnName="Mail" />
+                <ScalarProperty Name="IDTipoCliente" ColumnName="IDTipoCliente" />
+                <ScalarProperty Name="Observacion" ColumnName="Observacion" />
+                <ScalarProperty Name="Direccion" ColumnName="Direccion" />
+                <ScalarProperty Name="Borrado" ColumnName="Borrado" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="Servicio_Actualizar" FunctionName="Taller_MecanicoModel.Store.Servicio_Actualizar" />
+          <FunctionImportMapping FunctionImportName="Servicio_Agregar" FunctionName="Taller_MecanicoModel.Store.Servicio_Agregar" />
+          <FunctionImportMapping FunctionImportName="Servicio_Baja" FunctionName="Taller_MecanicoModel.Store.Servicio_Baja" />
+          <FunctionImportMapping FunctionImportName="Servicio_TraerTodo" FunctionName="Taller_MecanicoModel.Store.Servicio_TraerTodo">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Taller_MecanicoModel.Servicio_TraerTodo_Result">
+                <ScalarProperty Name="IDServicio" ColumnName="IDServicio" />
+                <ScalarProperty Name="IDCliente" ColumnName="IDCliente" />
+                <ScalarProperty Name="IDVehiculo" ColumnName="IDVehiculo" />
+                <ScalarProperty Name="FechaServicio" ColumnName="FechaServicio" />
+                <ScalarProperty Name="Km" ColumnName="Km" />
+                <ScalarProperty Name="IDEstado" ColumnName="IDEstado" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="Servicio_TraerTotalCliente" FunctionName="Taller_MecanicoModel.Store.Servicio_TraerTotalCliente" />
+          <FunctionImportMapping FunctionImportName="Servicio_TraerTotalVehiculo" FunctionName="Taller_MecanicoModel.Store.Servicio_TraerTotalVehiculo" />
+          <FunctionImportMapping FunctionImportName="Servicio_TraerUno" FunctionName="Taller_MecanicoModel.Store.Servicio_TraerUno">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Taller_MecanicoModel.Servicio_TraerUno_Result">
+                <ScalarProperty Name="IDServicio" ColumnName="IDServicio" />
+                <ScalarProperty Name="IDCliente" ColumnName="IDCliente" />
+                <ScalarProperty Name="IDVehiculo" ColumnName="IDVehiculo" />
+                <ScalarProperty Name="FechaServicio" ColumnName="FechaServicio" />
+                <ScalarProperty Name="Km" ColumnName="Km" />
+                <ScalarProperty Name="IDEstado" ColumnName="IDEstado" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="ServicioDetalle_Actualizar" FunctionName="Taller_MecanicoModel.Store.ServicioDetalle_Actualizar" />
+          <FunctionImportMapping FunctionImportName="ServicioDetalle_Agregar" FunctionName="Taller_MecanicoModel.Store.ServicioDetalle_Agregar" />
+          <FunctionImportMapping FunctionImportName="ServicioDetalle_Baja" FunctionName="Taller_MecanicoModel.Store.ServicioDetalle_Baja" />
+          <FunctionImportMapping FunctionImportName="ServicioDetalle_Traer" FunctionName="Taller_MecanicoModel.Store.ServicioDetalle_Traer">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Taller_MecanicoModel.ServicioDetalle_Traer_Result">
+                <ScalarProperty Name="IDServicioDetalle" ColumnName="IDServicioDetalle" />
+                <ScalarProperty Name="IDServicio" ColumnName="IDServicio" />
+                <ScalarProperty Name="Detalle" ColumnName="Detalle" />
+                <ScalarProperty Name="Importe" ColumnName="Importe" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="TotalDeuda" FunctionName="Taller_MecanicoModel.Store.TotalDeuda" />
+          <FunctionImportMapping FunctionImportName="TotalSaldoAFavor" FunctionName="Taller_MecanicoModel.Store.TotalSaldoAFavor" />
+          <FunctionImportMapping FunctionImportName="Vehiculo_Actualizar" FunctionName="Taller_MecanicoModel.Store.Vehiculo_Actualizar" />
+          <FunctionImportMapping FunctionImportName="Vehiculo_Agregar" FunctionName="Taller_MecanicoModel.Store.Vehiculo_Agregar" />
+          <FunctionImportMapping FunctionImportName="Vehiculo_Baja" FunctionName="Taller_MecanicoModel.Store.Vehiculo_Baja" />
+          <FunctionImportMapping FunctionImportName="Vehiculo_TraerTodo" FunctionName="Taller_MecanicoModel.Store.Vehiculo_TraerTodo">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Taller_MecanicoModel.Vehiculo_TraerTodo_Result">
+                <ScalarProperty Name="IDVehiculo" ColumnName="IDVehiculo" />
+                <ScalarProperty Name="Marca" ColumnName="Marca" />
+                <ScalarProperty Name="Anio" ColumnName="Anio" />
+                <ScalarProperty Name="Chasis" ColumnName="Chasis" />
+                <ScalarProperty Name="Motor" ColumnName="Motor" />
+                <ScalarProperty Name="Modelo" ColumnName="Modelo" />
+                <ScalarProperty Name="Patente" ColumnName="Patente" />
+                <ScalarProperty Name="FechaIngreso" ColumnName="FechaIngreso" />
+                <ScalarProperty Name="Km" ColumnName="Km" />
+                <ScalarProperty Name="IDCliente" ColumnName="IDCliente" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="Vehiculo_TraerUno" FunctionName="Taller_MecanicoModel.Store.Vehiculo_TraerUno">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Taller_MecanicoModel.Vehiculo_TraerUno_Result">
+                <ScalarProperty Name="IDVehiculo" ColumnName="IDVehiculo" />
+                <ScalarProperty Name="Marca" ColumnName="Marca" />
+                <ScalarProperty Name="Anio" ColumnName="Anio" />
+                <ScalarProperty Name="Chasis" ColumnName="Chasis" />
+                <ScalarProperty Name="Motor" ColumnName="Motor" />
+                <ScalarProperty Name="Modelo" ColumnName="Modelo" />
+                <ScalarProperty Name="Patente" ColumnName="Patente" />
+                <ScalarProperty Name="FechaIngreso" ColumnName="FechaIngreso" />
+                <ScalarProperty Name="Km" ColumnName="Km" />
+                <ScalarProperty Name="IDCliente" ColumnName="IDCliente" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="Vehiculo_TraerUnoCodigo" FunctionName="Taller_MecanicoModel.Store.Vehiculo_TraerUnoCodigo">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Taller_MecanicoModel.Vehiculo_TraerUnoCodigo_Result">
+                <ScalarProperty Name="IDVehiculo" ColumnName="IDVehiculo" />
+                <ScalarProperty Name="Marca" ColumnName="Marca" />
+                <ScalarProperty Name="Anio" ColumnName="Anio" />
+                <ScalarProperty Name="Chasis" ColumnName="Chasis" />
+                <ScalarProperty Name="Motor" ColumnName="Motor" />
+                <ScalarProperty Name="Modelo" ColumnName="Modelo" />
+                <ScalarProperty Name="Patente" ColumnName="Patente" />
+                <ScalarProperty Name="FechaIngreso" ColumnName="FechaIngreso" />
+                <ScalarProperty Name="Km" ColumnName="Km" />
+                <ScalarProperty Name="IDCliente" ColumnName="IDCliente" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

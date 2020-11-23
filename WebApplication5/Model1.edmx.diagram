@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="1c85c4091c4e4540b0ce480d5dba0522" Name="Diagram1">
+        <EntityTypeShape EntityType="Taller_MecanicoModel.Caja" Width="1.5" PointX="5.25" PointY="3.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="Taller_MecanicoModel.Cliente" Width="1.5" PointX="3" PointY="2.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="Taller_MecanicoModel.Estado" Width="1.5" PointX="6" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Taller_MecanicoModel.Servicio" Width="1.5" PointX="8.25" PointY="3" IsExpanded="true" />
+        <EntityTypeShape EntityType="Taller_MecanicoModel.ServicioDetalle" Width="1.5" PointX="10.5" PointY="3.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="Taller_MecanicoModel.TipoCliente" Width="1.5" PointX="0.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Taller_MecanicoModel.Vehiculo" Width="1.5" PointX="6" PointY="7.125" IsExpanded="true" />
+        <AssociationConnector Association="Taller_MecanicoModel.FK_Caja_Cliente" ManuallyRouted="false" />
+        <AssociationConnector Association="Taller_MecanicoModel.FK_Cliente_TipoCliente" ManuallyRouted="false" />
+        <AssociationConnector Association="Taller_MecanicoModel.FK_Servicio_Cliente" ManuallyRouted="false" />
+        <AssociationConnector Association="Taller_MecanicoModel.FK_Servicio_Estado" ManuallyRouted="false" />
+        <AssociationConnector Association="Taller_MecanicoModel.FK_Servicio_Vehiculo" ManuallyRouted="false" />
+        <AssociationConnector Association="Taller_MecanicoModel.FK_ServicioDetalle_Servicio" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
